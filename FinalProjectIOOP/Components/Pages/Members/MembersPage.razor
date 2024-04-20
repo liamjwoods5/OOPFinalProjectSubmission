@@ -1,0 +1,72 @@
+﻿@page "/members"
+@inherits MembersPageComponent
+@inject MemberServicesDB MemberService
+
+<h1 class="text-center">Members Management</h1>
+<p >Click on attribute to sort by</p>
+@if (members != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.MemberID))">ID</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.FirstName))">First Name</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.LastName))">Last Name</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.MemberEmail))">Email</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.MemberPhoneNumber))">Phone Number</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.JoinDate))">Join Date</th>
+                <th class="cursor-pointer" @onclick="() => SortTable(nameof(Member.MembershipTypeID))">Membership Type ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in members)
+            {
+                <tr>
+                    <td>@member.MemberID</td>
+                    <td>@member.FirstName</td>
+                    <td>@member.LastName</td>
+                    <td>@member.MemberEmail</td>
+                    <td>@member.MemberPhoneNumber</td>
+                    <td>@member.JoinDate</td>
+                    <td>@member.MembershipTypeID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="row text-center py-4">
+    <div class="col">
+        <button type="button" class="btn btn-primary" @onclick="NavigateToAddMember">Add Members</button>
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" @onclick="NavigateToUpdateMember">Update Members</button>
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" @onclick="NavigateToDeleteMember">Delete Members</button>
+    </div>
+</div>
+
+
+ @code
+ {
+    string currentSortColumn = null;
+    bool sortAscending = true;
+
+    void SortTable(string column)
+    {
+        if (currentSortColumn == column)
+        {
+            sortAscending = !sortAscending;
+        }
+        else
+        {
+            currentSortColumn = column;
+            sortAscending = true;
+        }
+
+        members = sortAscending
+            ? members.OrderBy(m => m.GetType().GetProperty(column).GetValue(m)).ToList()
+            : members.OrderByDescending(m => m.GetType().GetProperty(column).GetValue(m)).ToList();
+    }
+ }

@@ -1,0 +1,80 @@
+﻿@page "/deletemember"
+@inherits MembersPageComponent
+@inject MemberServicesDB MemberService
+
+<h1 class="text-center">Delete Members</h1>
+
+<EditForm Model="memberID" OnValidSubmit="SearchById">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row align-content-center">
+        <div class="col">
+            <label for="from">Member ID</label>
+            <InputNumber placeholder="ID" class="form-control" @bind-Value="memberID" required />
+            <ValidationMessage For="@(() => memberID)" />
+        </div>
+    </div>
+
+    <div class="text-center py-4">
+        <button class="btn btn-primary" type="submit">Search by ID</button>
+    </div>
+</EditForm>
+
+<div class="col">
+    <label>Member</label>
+    <select class="form-control">
+        @if (member != null)
+        {
+            <option placeholder="Member by ID" value="@member.MemberID">@member.FirstName @member.LastName</option>
+        }
+    </select>
+</div>
+
+<div>
+    <div class="row py-4 text-center">
+        <div>
+            <button type="button" class="btn btn-primary" @onclick="DeleteMember">Delete Member</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    int memberID;
+    Member member;
+
+
+    //method to search by ID
+    void SearchById()
+    {
+        try
+        {
+            member = MemberService.GetMemberByID(memberID);
+            if (member == null)
+            {
+                // Handle case when no member is found
+                throw new Exception("No member found with the provided ID.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    //method to delete a member
+    void DeleteMember()
+    {
+        try
+        {
+            MemberService.DeleteMember(memberID);
+            member = null; // Clear the member variable after deletion
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

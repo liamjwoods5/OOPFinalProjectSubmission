@@ -1,0 +1,16 @@
+﻿@page "/"
+@inherits EquipmentPageComponent
+
+<h1 class="text-center">Gym Management System</h1>
+<p class="text-center">Welcome, please select a page</p>
+
+<div class="text-center">
+    <div class="col">
+        <div class="py-4">
+            <button @onclick="NavigateToMemberPage" class="btn btn-primary mr-auto">Members Page</button>
+        </div>
+        <div class="py-4">
+            <button @onclick="NavigateToEquipmentPage" class="btn btn-primary mr-auto">Equipment Page</button>
+        </div>
+    </div>
+</div>

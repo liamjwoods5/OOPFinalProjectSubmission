@@ -1,0 +1,80 @@
+﻿@page "/addmember"
+@inherits MembersPageComponent
+@inject MemberServicesDB MemberServicesDB
+
+<div class="form-container">
+    <h2 class="text-center">Add New Members</h2>
+    <div>
+        <EditForm Model="newMember" OnValidSubmit="AddMember">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="memberID" class="form-label">Member ID:</label>
+                <InputNumber class="form-control" @bind-Value="newMember.MemberID" />
+                <ValidationMessage For="@(() => newMember.MemberID)" />
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="form-label">Member First Name:</label>
+                <InputText class="form-control" @bind-Value="newMember.FirstName" />
+                <ValidationMessage For="@(() => newMember.FirstName)" />
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Member Last Name:</label>
+                <InputText class="form-control" @bind-Value="newMember.LastName" />
+                <ValidationMessage For="@(() => newMember.LastName)" />
+            </div>
+            <div class="form-group">
+                <label for="memberEmail">Member Email:</label>
+                <InputText class="form-control" @bind-Value="newMember.MemberEmail" />
+                <ValidationMessage For="@(() => newMember.MemberEmail)" />
+            </div>
+            <div class="form-group">
+                <label for="memberPhoneNumber">Member Phone Number:</label>
+                <InputText class="form-control" @bind-Value="newMember.MemberPhoneNumber" />
+                <ValidationMessage For="@(() => newMember.MemberPhoneNumber)" />
+            </div>
+            <div class="form-group">
+                <label for="joinDate">Member Join Date:</label>
+                <InputText class="form-control" @bind-Value="newMember.JoinDate" />
+                <ValidationMessage For="@(() => newMember.JoinDate)" />
+            </div>
+            <div class="form-group">
+                <label for="membershipTypeID">Membership Type ID:</label>
+                <InputSelect @bind-Value="newMember.MembershipTypeID" class="form-select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => newMember.MembershipTypeID)" />
+            </div>
+            <div class="row py-4 text-center">
+                <div class="form-group">
+                    <button class="btn-primary btn" type="submit">Add Member</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private EditContext editContext;
+    private Member newMember = new Member();
+
+    // Prevent validation on input change
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        editContext = new EditContext(newMember);
+        editContext.OnFieldChanged += (sender, e) => { }; // Prevent validation on input change
+    }
+
+    // Add a new member
+    private void AddMember()
+    {
+        if (editContext.Validate()) // Validate the form when the submit button is pressed
+        {
+            MemberServicesDB.AddMember(newMember);
+        }
+    }
+}

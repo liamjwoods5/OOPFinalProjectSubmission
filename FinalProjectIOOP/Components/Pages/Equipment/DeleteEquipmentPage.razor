@@ -1,0 +1,77 @@
+﻿@page "/deleteequipment"
+@inherits EquipmentPageComponent
+@inject EquipmentServicesDB EquipmentServiceDB
+
+<h1 class="text-center">Delete Equipment</h1>
+
+<EditForm Model="equipmentID" OnValidSubmit="SearchById">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row align-content-center">
+        <div class="col">
+            <label for="from">Equipment ID</label>
+            <InputNumber placeholder="ID" class="form-control" @bind-Value="equipmentID" required />
+            <ValidationMessage For="@(() => equipmentID)" />
+        </div>
+    </div>
+
+    <div class="text-center py-4">
+        <button class="btn btn-primary" type="submit">Search by ID</button>
+    </div>
+</EditForm>
+
+<div class="col">
+    <label>Equipment</label>
+    <select class="form-control">
+        @if (equipment != null)
+        {
+            <option placeholder="Equipment by ID" value="@equipment.EquipmentID">@equipment.EquipmentName</option>
+        }
+    </select>
+</div>
+
+<div>
+    <div class="row py-4 text-center">
+        <div>
+            <button type="button" class="btn btn-primary" @onclick="DeleteEquipmentByID">Delete Equipment</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    int equipmentID;
+    Equipment equipment;
+
+    void SearchById()
+    {
+        try
+        {
+            equipment = EquipmentServiceDB.GetEquipmentByID(equipmentID);
+            if (equipment == null)
+            {
+                // Handle case when no equipment is found
+                throw new Exception("No equipment found with the provided ID.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    void DeleteEquipmentByID()
+    {
+        try
+        {
+            EquipmentServiceDB.DeleteEquipment(equipmentID);
+            equipment = null; // Clear the equipment variable after deletion
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

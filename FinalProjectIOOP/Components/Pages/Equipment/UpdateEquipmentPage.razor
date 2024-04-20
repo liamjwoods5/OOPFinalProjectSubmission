@@ -1,0 +1,59 @@
+@page "/updateequipment"
+@inherits EquipmentPageComponent
+@inject EquipmentServicesDB EquipmentServiceDB
+
+<div class="form-container">
+    <h2 class="text-center">Update Equipment</h2>
+
+    <EditForm Model="updatedEquipment" OnValidSubmit="UpdateEquipment">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="equipmentName" class="form-label">Equipment ID:</label>
+            <InputNumber id="equipmentIDUpdate" class="form-control" @bind-Value="updatedEquipment.EquipmentID" />
+            <ValidationMessage For="@(() => updatedEquipment.EquipmentID)" />
+        </div>
+        <div class="form-group">
+            <label for="equipmentName" class="form-label">Equipment Name:</label>
+            <InputText id="equipmentNameUpdate" class="form-control" @bind-Value="updatedEquipment.EquipmentName" />
+            <ValidationMessage For="@(() => updatedEquipment.EquipmentName)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentDescription">Equipment Description:</label>
+            <InputText id="equipmentDescriptionUpdate" class="form-control" @bind-Value="updatedEquipment.EquipmentDescription" />
+            <ValidationMessage For="@(() => updatedEquipment.EquipmentDescription)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentCategoryId">Equipment Category ID:</label>
+            <InputNumber id="equipmentCategoryIdUpdate" class="form-control" @bind-Value="updatedEquipment.EquipmentCategoryID" />
+            <ValidationMessage For="@(() => updatedEquipment.EquipmentCategoryID)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentStatus">Equipment Status:</label>
+            <InputSelect @bind-Value="updatedEquipment.EquipmentStatus" id="equipmentStatusUpdate" class="form-select">
+                <option></option>
+                <option value="Available">Available</option>
+                <option value="In Maintenance">In Maintenance</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => updatedEquipment.EquipmentStatus)" />
+        </div>
+        <div class="form-group text-center py-4">
+            <button class="btn-primary btn" type="submit">Update Equipment</button>
+        </div>
+
+    </EditForm>
+</div>
+
+@code {
+    private Equipment updatedEquipment = new Equipment();
+
+    // Update Equipment
+    private void UpdateEquipment()
+    {
+        EquipmentServiceDB.UpdateEquipment(updatedEquipment);
+    }
+}

@@ -1,0 +1,58 @@
+@page "/addequipment"
+@inherits EquipmentPageComponent
+@inject EquipmentServicesDB EquipmentServiceDB
+
+<div class="form-container">
+    <h2 class=>Add New Equipment</h2>
+
+    <EditForm Model="newEquipment" OnValidSubmit="AddEquipment">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="equipmentName" class="form-label">Equipment ID:</label>
+            <InputNumber id="equipmentID" class="form-control" @bind-Value="newEquipment.EquipmentID" />
+            <ValidationMessage For="@(() => newEquipment.EquipmentID)" />
+        </div>
+        <div class="form-group">
+            <label for="equipmentName" class="form-label">Equipment Name:</label>
+            <InputText id="equipmentName" class="form-control" @bind-Value="newEquipment.EquipmentName" />
+            <ValidationMessage For="@(() => newEquipment.EquipmentName)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentDescription">Equipment Description:</label>
+            <InputText id="equipmentDescription" class="form-control" @bind-Value="newEquipment.EquipmentDescription" />
+            <ValidationMessage For="@(() => newEquipment.EquipmentDescription)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentCategoryId">Equipment Category ID:</label>
+            <InputNumber id="equipmentCategoryId" class="form-control" @bind-Value="newEquipment.EquipmentCategoryID" />
+            <ValidationMessage For="@(() => newEquipment.EquipmentCategoryID)" />
+        </div>
+
+        <div class="form-group">
+            <label for="equipmentStatus">Equipment Status:</label>
+            <InputSelect @bind-Value="newEquipment.EquipmentStatus" id="equipmentStatus" class="form-select">
+                <option></option>
+                <option value="Available">Available</option>
+                <option value="In Maintenance">In Maintenance</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => newEquipment.EquipmentStatus)" />
+        </div>
+        <div class="form-group py-4 text-center">
+            <button class="btn-primary btn" type="submit">Add Equipment</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private Equipment newEquipment = new Equipment();
+
+    private void AddEquipment()
+    {
+        EquipmentServiceDB.AddEquipment(newEquipment);
+        newEquipment = new Equipment(); // Reset the form
+    }   
+}

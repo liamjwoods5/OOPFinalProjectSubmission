@@ -1,0 +1,36 @@
+﻿@page "/newcategory"
+@inject EquipmentServicesDB EquipmentService
+@inherits EquipmentPageComponent
+
+<div class="form-container">
+    <h2 class="text-center">Add New Category</h2>
+
+    <EditForm Model="newCategory" OnValidSubmit="AddCategory">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="equipmentCategoryID" class="form-label">Category ID:</label>
+            <InputNumber id="equipmentCategoryID" class="form-control" @bind-Value="newCategory.EquipmentCategoryID" />
+            <ValidationMessage For="@(() => newCategory.EquipmentCategoryID)" />
+        </div>
+        <div class="form-group">
+            <label for="categoryName" class="form-label">Category Name:</label>
+            <InputText id="categoryName" class="form-control" @bind-Value="newCategory.CategoryName" />
+            <ValidationMessage For="@(() => newCategory.CategoryName)" />
+        </div>
+        <div class="form-group text-center py-4">
+            <button class="btn-primary btn" type="submit">Add Category</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    public EquipmentCategory newCategory = new EquipmentCategory();
+
+    void AddCategory()
+    {
+        EquipmentServiceDB.AddEquipmentCategory(newCategory);
+    }
+}
+

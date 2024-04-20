@@ -1,0 +1,91 @@
+﻿@page "/updatemember"
+@inherits MembersPageComponent
+@inject MemberServicesDB MemberService
+
+<h1 class="text-center">Update Members</h1>
+
+<EditForm Model="memberID" OnValidSubmit="SearchById">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row text-center">
+        <div class="">
+            <label for="from">Member ID</label>
+            <InputNumber class="form-control" @bind-Value="memberID" required />
+            <ValidationMessage For="@(() => memberID)" />
+        </div>
+    </div>
+
+    <div class="text-center py-4">
+        <button class="btn btn-primary" type="submit">Search by ID</button>
+    </div>
+</EditForm>
+
+@if (member != null)
+{
+    <EditForm Model="member" OnValidSubmit="UpdateMember">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="firstName" class="form-label">Member First Name:</label>
+            <InputText class="form-control" @bind-Value="member.FirstName" required />
+            <ValidationMessage For="@(() => member.FirstName)" />
+        </div>
+        <div class="form-group">
+            <label for="lastName" class="form-label">Member Last Name:</label>
+            <InputText class="form-control" @bind-Value="member.LastName" required />
+            <ValidationMessage For="@(() => member.LastName)" />
+        </div>
+        <div class="form-group">
+            <label for="memberEmail">Member Email:</label>
+            <InputText class="form-control" @bind-Value="member.MemberEmail" required />
+            <ValidationMessage For="@(() => member.MemberEmail)" />
+        </div>
+        <div class="form-group">
+            <label for="memberPhoneNumber">Member Phone Number:</label>
+            <InputText class="form-control" @bind-Value="member.MemberPhoneNumber" required />
+            <ValidationMessage For="@(() => member.MemberPhoneNumber)" />
+        </div>
+        <div class="form-group">
+            <label for="joinDate">Member Join Date:</label>
+            <InputText class="form-control" @bind-Value="member.JoinDate" required />
+            <ValidationMessage For="@(() => member.JoinDate)" />
+        </div>
+        <div class="form-group">
+            <label for="membershipTypeID">Membership Type ID:</label>
+            <InputSelect @bind-Value="member.MembershipTypeID" class="form-select">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => member.MembershipTypeID)" />
+        </div>
+        <div class="form-group py-4 text-center">
+            <button class="btn-primary btn" type="submit">Update Member</button>
+        </div>
+    </EditForm>
+}
+
+
+@code {
+    int memberID;
+    Member member;
+
+    // Search for member by ID
+
+    void SearchById()
+    {
+        member = MemberService.GetMemberByID(memberID);
+        if (member == null)
+        {
+            // Handle case when no member is found
+        }
+    }
+
+    // Update member call
+    void UpdateMember()
+    {
+        MemberService.UpdateMember(member);
+    }
+}
